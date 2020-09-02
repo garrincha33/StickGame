@@ -8,8 +8,6 @@
 
 import UIKit
 
-//create types for screenWidth
-
 public let screenWidth: CGFloat = 1536.0
 public let screenHeight: CGFloat = 2048.0
 

@@ -22,8 +22,6 @@ class GameScene: SKScene {
 }
 
 
-//MARK: - configuration
-
 extension GameScene {
     
     
