@@ -14,6 +14,9 @@
 		1B1A9C1A24FFCC5B00D36E33 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1B1A9C1924FFCC5B00D36E33 /* Assets.xcassets */; };
 		1B1A9C1D24FFCC5B00D36E33 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1B1A9C1B24FFCC5B00D36E33 /* LaunchScreen.storyboard */; };
 		1B1A9C2B24FFDC5400D36E33 /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B1A9C2A24FFDC5400D36E33 /* Types.swift */; };
+		1BDB598A2500EB7E00931C90 /* StackNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDB59892500EB7E00931C90 /* StackNode.swift */; };
+		1BDB598D2500F19900931C90 /* CGFloat+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDB598C2500F19900931C90 /* CGFloat+Ext.swift */; };
+		1BDB598F2500F2B500931C90 /* Int+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDB598E2500F2B500931C90 /* Int+Ext.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +29,9 @@
 		1B1A9C1C24FFCC5B00D36E33 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1B1A9C1E24FFCC5B00D36E33 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1B1A9C2A24FFDC5400D36E33 /* Types.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
+		1BDB59892500EB7E00931C90 /* StackNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackNode.swift; sourceTree = "<group>"; };
+		1BDB598C2500F19900931C90 /* CGFloat+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGFloat+Ext.swift"; sourceTree = "<group>"; };
+		1BDB598E2500F2B500931C90 /* Int+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Ext.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +64,8 @@
 		1B1A9C0B24FFCC5300D36E33 /* TheStickMan */ = {
 			isa = PBXGroup;
 			children = (
+				1BDB598B2500EDCB00931C90 /* MyUtils */,
+				1BDB59882500EB6100931C90 /* StackNode */,
 				1B1A9C2924FFDC4200D36E33 /* Types */,
 				1B1A9C2424FFD89D00D36E33 /* AppDelegate */,
 				1B1A9C2724FFD94800D36E33 /* Views */,
@@ -116,6 +124,23 @@
 				1B1A9C2A24FFDC5400D36E33 /* Types.swift */,
 			);
 			path = Types;
+			sourceTree = "<group>";
+		};
+		1BDB59882500EB6100931C90 /* StackNode */ = {
+			isa = PBXGroup;
+			children = (
+				1BDB59892500EB7E00931C90 /* StackNode.swift */,
+			);
+			path = StackNode;
+			sourceTree = "<group>";
+		};
+		1BDB598B2500EDCB00931C90 /* MyUtils */ = {
+			isa = PBXGroup;
+			children = (
+				1BDB598C2500F19900931C90 /* CGFloat+Ext.swift */,
+				1BDB598E2500F2B500931C90 /* Int+Ext.swift */,
+			);
+			path = MyUtils;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -189,10 +214,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1BDB598F2500F2B500931C90 /* Int+Ext.swift in Sources */,
+				1BDB598D2500F19900931C90 /* CGFloat+Ext.swift in Sources */,
 				1B1A9C1324FFCC5300D36E33 /* GameScene.swift in Sources */,
 				1B1A9C1524FFCC5300D36E33 /* GameViewController.swift in Sources */,
 				1B1A9C0D24FFCC5300D36E33 /* AppDelegate.swift in Sources */,
 				1B1A9C2B24FFDC5400D36E33 /* Types.swift in Sources */,
+				1BDB598A2500EB7E00931C90 /* StackNode.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

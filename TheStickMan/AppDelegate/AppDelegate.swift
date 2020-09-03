@@ -12,10 +12,28 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    
+    var iPad = false
+    var isX = false
+    var iPhone = false
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        
+        //device detection
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            
+            iPad = false
+            switch UIScreen.main.nativeBounds.height {
+            case 2688, 1792, 2436: isX = true; break
+            default: iPhone = true; break
+            }
+            
+        }
+        
+        
+        
+        
         return true
     }
 

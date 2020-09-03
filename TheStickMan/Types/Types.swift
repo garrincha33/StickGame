@@ -10,4 +10,12 @@ import UIKit
 
 public let screenWidth: CGFloat = 1536.0
 public let screenHeight: CGFloat = 2048.0
+ let appDl = UIApplication.shared.delegate as! AppDelegate
+
+struct ChildName {
+    static let Background = "Background"
+    static let StackNode = "StackNode"
+}
+
+
 
