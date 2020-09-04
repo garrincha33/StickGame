@@ -15,6 +15,7 @@ class GameScene: SKScene {
     private let worldNode = SKNode()
     private var leftStack = StackNode()
     private var leftRight = StackNode()
+    private let hero = HeroNode()
     private var stackMinWidth: CGFloat = 50.0
     private var stackMaxWidth: CGFloat = 300.00
     private let stackHeight: CGFloat = 500.00
@@ -34,6 +35,7 @@ class GameScene: SKScene {
         
         setupNodes()
         
+        
     }
 
 }
@@ -44,10 +46,8 @@ extension GameScene {
     func setupNodes() {
         addChild(worldNode)
         setupBG()
-        
         leftStack = createStack(false, xPos: 0.0)
-        
-        
+        createHero()
     }
     
     //MARK:- BG
@@ -89,11 +89,8 @@ extension GameScene {
 }
 
 //MARK:- Stack
-
 extension GameScene {
-
     func createStack(_ anim: Bool, xPos: CGFloat) -> StackNode {
-        
         let min = Int(stackMinWidth/10)
         let max = Int(stackMaxWidth/10)
         let width = CGFloat(Int.random(range: min...max)*10)
@@ -105,13 +102,25 @@ extension GameScene {
         } else {
             stack.position = CGPoint(x: xPos + width/2, y: stackHeight/2)
         }
-        
-        
-        //set postion of stacknode
+        //set postion of stacknode, adding to the worldNode which is the background
         worldNode.addChild(stack)
         return stack
+    }
+}
+
+//HeroStack
+extension GameScene {
+    
+    func createHero() {
+        //set hero ontop of left stack and add to worldNode
+        let x =  leftStack.position.x - 15.0
+        let y = stackHeight + hero.frame.height / 2
+        hero.position = CGPoint(x: x, y: y)
+        worldNode.addChild(hero)
+        
         
     }
     
-
+    
+    
 }
