@@ -23,6 +23,7 @@ class GameScene: SKScene {
     private let gapMinWidth = 60
     private var nextValueX: CGFloat = 0.0
     private let heroSpeed: CGFloat = 760.0
+    private var stickHeight: CGFloat = 0.0
     
     private var isBegin = false
     private var isEnd = false
@@ -69,12 +70,10 @@ class GameScene: SKScene {
             
             let rotationAction = SKAction.rotate(toAngle: CGFloat(-90).degreesToRadiens(), duration: 0.7, shortestUnitArc: true)
             stick.removeAction(forKey: ActionKey.StickResize)
+            stickHeight = stick.frame.height
             stick.run(.sequence([.wait(forDuration: 0.2), rotationAction])) { [unowned self] in
-                
-                print("Hero GO")
-                self.heroGo()
-                
-                
+                self.heroGo(self.checkPass())
+   
             }
         }
     }
@@ -90,6 +89,12 @@ extension GameScene {
         let maxGap = Int(playableArea.width - stackMaxWidth - leftStack.frame.width)
         let gap = CGFloat(Int.random(range: gapMinWidth...maxGap))
         rightStack = createStack(false, xPos: gap + nextValueX)
+        
+        setupPhysics()
+    }
+    
+    func setupPhysics() {
+        physicsWorld.gravity.dy = -100.00
     }
     
     //MARK:- BG
@@ -159,11 +164,21 @@ extension GameScene {
         let y = stackHeight + hero.frame.height / 2
         hero.position = CGPoint(x: x, y: y)
         worldNode.addChild(hero)
-        
-        
     }
     
-    func heroGo() {
+    func heroGo(_ checkPass: Bool) {
+        guard checkPass else {
+            let distance = stick.position.x + stickHeight
+            let gap = nextValueX - rightStack.frame.width / 2 - abs(hero.position.x)
+            let duration = TimeInterval(gap / heroSpeed)
+            let moveAction = SKAction.moveTo(x: distance, duration: duration)
+            hero.run(moveAction)  { [unowned self] in
+    
+                self.stick.run(.rotate(toAngle: CGFloat(-180).degreesToRadiens(), duration: 0.3))
+                self.hero.physicsBody?.affectedByGravity = true
+            }
+            return
+        }
         
         let distance = nextValueX - hero.frame.width / 2
         let gap = nextValueX - rightStack.frame.width / 2 - abs(hero.position.x)
@@ -173,9 +188,14 @@ extension GameScene {
         hero.run(moveAction) {
             //
         }
-        
     }
     
+    //Has hero passed?
+    func checkPass() -> Bool {
+        guard stickHeight + stick.position.x < nextValueX else {return false}
+        guard leftStack.frame.intersects(stick.frame) && rightStack.frame.intersects(stick.frame) else {return false}
+        return true
+    }
 }
 
 //MARK:- StickNode
