@@ -16,13 +16,17 @@ class GameScene: SKScene {
     private var leftStack = StackNode()
     private var rightStack = StackNode()
     private let hero = HeroNode()
+    private var stick: SKSpriteNode!
     private var stackMinWidth: CGFloat = 50.0
     private var stackMaxWidth: CGFloat = 300.00
     private let stackHeight: CGFloat = 500.00
     private let gapMinWidth = 60
     private var nextValueX: CGFloat = 0.0
+    
+    private var isBegin = false
+    private var isEnd = false
+    
     private var playableArea: CGRect {
-        
         
         let ratio: CGFloat = appDl.isX ? 2.16 : 16/9
         let playableWidth = size.height / ratio
@@ -40,12 +44,42 @@ class GameScene: SKScene {
         
         
     }
-
+    
+    //sticknode is created once we touch the screen
+    //with touches began
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        print("touched")
+        if !isBegin && !isEnd {
+            isBegin = true
+            stick = createStick()
+        
+            let resizeAction = SKAction.resize(toHeight: screenHeight-stackHeight, duration: 1.5)
+            stick.run(resizeAction, withKey: ActionKey.StickResize)
+        }
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
+        
+        if isBegin && !isEnd {
+            isEnd = true
+            
+            let rotationAction = SKAction.rotate(toAngle: CGFloat(-90).degreesToRadiens(), duration: 0.7, shortestUnitArc: true)
+            stick.removeAction(forKey: ActionKey.StickResize)
+            stick.run(.sequence([.wait(forDuration: 0.2), rotationAction])) { [unowned self] in
+                
+                print("Hero GO")
+                
+                
+            }
+        }
+    }
 }
 
 //MARK:- configures
 extension GameScene {
-    
     func setupNodes() {
         addChild(worldNode)
         setupBG()
@@ -115,9 +149,8 @@ extension GameScene {
     }
 }
 
-//HeroStack
+//MARK:- HeroStack
 extension GameScene {
-    
     func createHero() {
         //set hero ontop of left stack and add to worldNode
         let x =  leftStack.position.x - 15.0
@@ -128,6 +161,25 @@ extension GameScene {
         
     }
     
-    
+}
+
+//MARK:- StickNode
+extension GameScene {
+    func createStick() -> SKSpriteNode {
+        let stickSize = CGSize(width: 12, height: 1.0)
+        let stick = SKSpriteNode(texture: nil, color: .black, size: stickSize)
+        stick.zPosition = 5.0
+        stick.anchorPoint = CGPoint(x: 0.5, y: 0.0)
+        stick.name = "Stick"
+        
+        let x = leftStack.frame.maxX - 6.0
+        let y = hero.position.y - hero.frame.height / 2
+        stick.position = CGPoint(x: x, y: y)
+        worldNode.addChild(stick)
+        
+        return stick
+        
+    }
     
 }
+

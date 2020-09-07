@@ -17,5 +17,10 @@ struct ChildName {
     static let StackNode = "StackNode"
 }
 
+struct ActionKey {
+    static let StickResize =  "StickResize"
+}
+
+
 
 
