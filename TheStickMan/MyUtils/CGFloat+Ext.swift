@@ -8,6 +8,8 @@
 
 import CoreGraphics
 
+public let pii = CGFloat.pi
+
 extension CGFloat {
     static func random() -> CGFloat {
         //returns random value of 0 or 1
@@ -18,5 +20,13 @@ extension CGFloat {
         assert(min < max)
         return CGFloat.random() * (max - min) + min
     }
+    
+     func degreesToRadiens() -> CGFloat {
+        return self * pii / 180
+    }
+    
+     func radiensToDegrees() -> CGFloat {
+           return self * 180 / pii
+       }
     
 }
