@@ -22,6 +22,7 @@ class GameScene: SKScene {
     private let stackHeight: CGFloat = 500.00
     private let gapMinWidth = 60
     private var nextValueX: CGFloat = 0.0
+    private let heroSpeed: CGFloat = 760.0
     
     private var isBegin = false
     private var isEnd = false
@@ -71,6 +72,7 @@ class GameScene: SKScene {
             stick.run(.sequence([.wait(forDuration: 0.2), rotationAction])) { [unowned self] in
                 
                 print("Hero GO")
+                self.heroGo()
                 
                 
             }
@@ -158,6 +160,19 @@ extension GameScene {
         hero.position = CGPoint(x: x, y: y)
         worldNode.addChild(hero)
         
+        
+    }
+    
+    func heroGo() {
+        
+        let distance = nextValueX - hero.frame.width / 2
+        let gap = nextValueX - rightStack.frame.width / 2 - abs(hero.position.x)
+        let duration = TimeInterval(gap / heroSpeed)
+        
+        let moveAction = SKAction.moveTo(x: distance, duration: duration)
+        hero.run(moveAction) {
+            //
+        }
         
     }
     
