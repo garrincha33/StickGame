@@ -17,6 +17,7 @@ class GameScene: SKScene {
     private var rightStack = StackNode()
     private let hero = HeroNode()
     private var stick: SKSpriteNode!
+    private var leftStacks: [StackNode] = []
     private var stackMinWidth: CGFloat = 50.0
     private var stackMaxWidth: CGFloat = 300.00
     private let stackHeight: CGFloat = 500.00
@@ -24,7 +25,7 @@ class GameScene: SKScene {
     private var nextValueX: CGFloat = 0.0
     private let heroSpeed: CGFloat = 760.0
     private var stickHeight: CGFloat = 0.0
-    
+    private var stickNumber: CGFloat = 0
     private var isBegin = false
     private var isEnd = false
     
@@ -125,7 +126,7 @@ extension GameScene {
         
         let bg3 = SKSpriteNode(imageNamed: "bg1_3")
         bg3.anchorPoint = .zero
-        bg2.position = CGPoint(x: bg1.frame.width+2, y: 0.0)
+        bg3.position = CGPoint(x: bg1.frame.width+2, y: 0.0)
         bg.addChild(bg3)
         
         bg.size = CGSize(width: bg1.frame.width*3, height: bg1.frame.height)
@@ -146,6 +147,11 @@ extension GameScene {
         
         if anim {
             stack.position = CGPoint(x: screenWidth, y: stackHeight/2)
+            let moveAction = SKAction.moveTo(x: xPos, duration: 0.3)
+            stack.run(moveAction)  { [unowned self] in
+                self.isBegin = false
+                self.isEnd = false
+            }
         } else {
             stack.position = CGPoint(x: xPos + width/2, y: stackHeight/2)
         }
@@ -154,7 +160,68 @@ extension GameScene {
         worldNode.addChild(stack)
         return stack
     }
-}
+    
+    func moveAndCreateStack() {
+        
+        let value: CGFloat = appDl.iPad ? 0.0 : 16.0
+        let xRightStack = rightStack.frame.width/2 + value
+        let moveAction = SKAction.moveTo(x: xRightStack, duration: 0.5)
+        rightStack.run(moveAction) { [unowned self] in
+            if self.stickNumber == 2 {
+                for child in self.worldNode.children {
+                    if child.name == "Stick1" {
+                        child.removeFromParent()
+                    }
+                }
+            }
+        }
+        
+        worldNode.enumerateChildNodes(withName: ChildName.Background) { (node, _) in
+            guard let bg = node as? SKSpriteNode else {return}
+            bg.run(.moveBy(x: -100.00, y: 0.0, duration: 0.6))
+            if bg.position.x + bg.frame.width < -self.frame.width {
+                bg.position.x += bg.position.x + bg.frame.width*3
+            }
+        }
+        
+        let xHero = value + (rightStack.frame.width - hero.frame.width/2)
+        let moveHAction = SKAction.moveTo(x: xHero, duration: 0.5)
+        hero.run(moveHAction)
+        
+        let xStick = -stickHeight + value
+        let moveSAction = SKAction.moveTo(x: xStick, duration: 0.5)
+        stick.run(moveSAction) { [unowned self] in
+            if self.stickNumber == 2 {
+                self.stickNumber = 1
+                self.stick.name = "Stick\(self.stickNumber)"
+            }
+        }
+        
+        if self.leftStacks.count != 0 {
+            self.leftStacks[0].run(.sequence([.wait(forDuration: 0.3), .removeFromParent()]))
+            
+        }
+        
+        let xLeftStack = -leftStack.frame.width/2
+        let moveLAction = SKAction.moveTo(x: xLeftStack, duration: 0.5)
+        leftStack.run(moveLAction) {
+            self.leftStacks.removeAll()
+            self.leftStacks.append(self.leftStack.copy() as! StackNode)
+            self.leftStacks[0].position = self.leftStack.position
+            self.worldNode.addChild(self.leftStacks[0])
+            self.leftStack.removeFromParent()
+            self.leftStack = self.rightStack
+            
+            let rightSW = self.rightStack.frame.width
+            let maxGap = Int(self.playableArea.width - rightSW - self.stackMaxWidth)
+            let gap = CGFloat(Int.random(range: self.gapMinWidth...maxGap))
+            let xPos = value + rightSW + gap
+            self.rightStack = self.createStack(true, xPos: xPos)
+            
+           }
+        }
+    }
+
 
 //MARK:- HeroStack
 extension GameScene {
@@ -185,8 +252,8 @@ extension GameScene {
         let duration = TimeInterval(gap / heroSpeed)
         
         let moveAction = SKAction.moveTo(x: distance, duration: duration)
-        hero.run(moveAction) {
-            //
+        hero.run(moveAction) { [unowned self] in
+            self.moveAndCreateStack()
         }
     }
     
@@ -203,9 +270,10 @@ extension GameScene {
     func createStick() -> SKSpriteNode {
         let stickSize = CGSize(width: 12, height: 1.0)
         let stick = SKSpriteNode(texture: nil, color: .black, size: stickSize)
+        stickNumber += 1
         stick.zPosition = 5.0
         stick.anchorPoint = CGPoint(x: 0.5, y: 0.0)
-        stick.name = "Stick"
+        stick.name = "Stick\(stickNumber)"
         
         let x = leftStack.frame.maxX - 6.0
         let y = hero.position.y - hero.frame.height / 2
